@@ -19,7 +19,9 @@ namespace Lab1.MyList {
 
         public MyList(int capacity = DefaultCapacity)
         {
-            if(capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity is invalid");
+            if (capacity < 0) {
+                throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity is invalid");
+            }
             _capacity = capacity;
             _size = 0;
             _items = capacity is 0 ? Array.Empty<T>() : new T[capacity];
@@ -28,8 +30,11 @@ namespace Lab1.MyList {
         public T this[int index] {
             get => _items[index];
             set {
-                if (index < 0 || index >= _items.Length - 1)
+                if (index < 0 || index >= _items.Length - 1) {
                     throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range");
+                }
+
+                _items[index] = value;
             }
         }
 
@@ -55,7 +60,45 @@ namespace Lab1.MyList {
         }
 
         public void CopyTo(T[] array, int arrayIndex) {
-            throw new NotImplementedException();
+            if (array.Length - arrayIndex < _items.Length) {
+                throw new ArgumentException("Dest array is too small");
+            }
+            Array.Copy(_items, 0, array, arrayIndex,_items.Length);
+        }
+
+        public int IndexOf(T item) {
+            return Array.IndexOf(_items, item);
+        }
+
+        public void Insert(int index, T item) {
+            if(_size < index || index < 0) {
+                throw new ArgumentOutOfRangeException("Inalid index. Index must be in range.");
+            }
+            if(_size == index) {
+                Resize();
+            }
+
+            Array.Copy(_items, index, _items, index + 1, _size - index);
+            _size++;
+            _items[index] = item;
+        }
+
+        public bool Remove(T item) {
+            if(_size == 0) {
+                throw new InvalidOperationException("You can't remove item because array is empty");
+            }
+            var index = Array.IndexOf(_items, item);
+            var isRemoved = index != -1;
+            RemoveAt(index);
+            return isRemoved;
+        }
+
+        public void RemoveAt(int index) {
+            if (index > _size || index < 0) {
+                throw new ArgumentOutOfRangeException("You can't remove item because index is out of range");
+            }
+            _size--;
+            Array.Copy(_items, index + 1, _items, index, _size - index);
         }
 
         public IEnumerator<T> GetEnumerator() {
@@ -64,22 +107,6 @@ namespace Lab1.MyList {
 
         IEnumerator IEnumerable.GetEnumerator() {
             return GetEnumerator();
-        }
-
-        public int IndexOf(T item) {
-            throw new NotImplementedException();
-        }
-
-        public void Insert(int index, T item) {
-            throw new NotImplementedException();
-        }
-
-        public bool Remove(T item) {
-            throw new NotImplementedException();
-        }
-
-        public void RemoveAt(int index) {
-            throw new NotImplementedException();
         }
 
         private void Resize() {
