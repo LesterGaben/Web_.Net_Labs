@@ -34,7 +34,11 @@ namespace Lab1.MyList {
         }
 
         public void Add(T item) {
-            throw new NotImplementedException();
+            if (_size >= _capacity) {
+                Resize();
+            }
+            _items[_size] = item;
+            _size++;
         }
 
         public void Clear() {
@@ -78,5 +82,12 @@ namespace Lab1.MyList {
             throw new NotImplementedException();
         }
 
+        private void Resize() {
+            var NewCapacity = _capacity * 2;
+            var tempArray = new T[NewCapacity];
+            Array.Copy(_items, tempArray, _size);
+            _items = tempArray;
+            _capacity = NewCapacity;
+        }
     }
 }
