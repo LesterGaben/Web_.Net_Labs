@@ -8,22 +8,46 @@ using System.Threading.Tasks;
 namespace Lab1.MyList {
     public class MyList<T> : IList<T> {
 
-        public T this[int index] { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+        private T[] _items;
+        private const int DefaultCapacity = 5;
 
-        public int Count => throw new NotImplementedException();
+        private int _capacity;
+        private int _size;
 
-        public bool IsReadOnly => throw new NotImplementedException();
+        public int Count => _size;
+        public bool IsReadOnly => false;
+
+        public MyList(int capacity = DefaultCapacity)
+        {
+            if(capacity < 0) throw new ArgumentOutOfRangeException(nameof(capacity), "Capacity is invalid");
+            _capacity = capacity;
+            _size = 0;
+            _items = capacity is 0 ? Array.Empty<T>() : new T[capacity];
+        }
+
+        public T this[int index] {
+            get => _items[index];
+            set {
+                if (index < 0 || index >= _items.Length - 1)
+                    throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range");
+            }
+        }
 
         public void Add(T item) {
             throw new NotImplementedException();
         }
 
         public void Clear() {
-            throw new NotImplementedException();
+            _items = new T[_capacity];
+            _size = 0;
         }
 
         public bool Contains(T item) {
-            throw new NotImplementedException();
+            for (int i = 0; i < _capacity; i++) {
+                var element = _items[i];
+                if (element?.Equals(item) == true) return true;
+            }
+            return false;
         }
 
         public void CopyTo(T[] array, int arrayIndex) {
@@ -31,7 +55,11 @@ namespace Lab1.MyList {
         }
 
         public IEnumerator<T> GetEnumerator() {
-            throw new NotImplementedException();
+            return new MyListEnumerator<T>(this);
+        }
+
+        IEnumerator IEnumerable.GetEnumerator() {
+            return GetEnumerator();
         }
 
         public int IndexOf(T item) {
@@ -50,8 +78,5 @@ namespace Lab1.MyList {
             throw new NotImplementedException();
         }
 
-        IEnumerator IEnumerable.GetEnumerator() {
-            throw new NotImplementedException();
-        }
     }
 }

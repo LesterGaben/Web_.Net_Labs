@@ -22,19 +22,27 @@ namespace Lab1.MyList {
             if(list.Any() == true) {
                 _current = _list[_index];
             }
-        }
-
-        public void Dispose() {
-            throw new NotImplementedException();
+            else {
+                _current = default!;
+            }
         }
 
         public bool MoveNext() {
-            throw new NotImplementedException();
+            if (_index >= _list.Count - 1) {
+                return false;
+            }
+            
+            _index++;
+            _current = _list[_index];
+            return true;
         }
 
         public void Reset() {
             _index = 0;
             _current = _list[_index];
+        }
+
+        public void Dispose() {
         }
     }
 }
