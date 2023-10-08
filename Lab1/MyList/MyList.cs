@@ -60,6 +60,7 @@ namespace Lab1.MyList {
         }
 
         public void CopyTo(T[] array, int arrayIndex) {
+            if(array == null) throw new ArgumentNullException(nameof(array));
             if (array.Length - arrayIndex < _items.Length) {
                 throw new ArgumentException("Dest array is too small");
             }
