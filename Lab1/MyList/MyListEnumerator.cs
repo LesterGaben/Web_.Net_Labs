@@ -13,7 +13,7 @@ namespace Lab1.MyList {
         private int _index;
         private T _current;
         public T Current => _current;
-        object IEnumerator.Current => _current;
+        object IEnumerator.Current => _current!;
 
         public MyListEnumerator(IList<T> list) {
             _list = list;

@@ -17,6 +17,21 @@ namespace Lab1.MyList {
         public int Count => _size;
         public bool IsReadOnly => false;
 
+        public EventHandler<MyListNewSizeEventArgs> ArrayResized;
+        public EventHandler<MyListCreatedEventArgs> ArrayCreated;
+
+        private void OnArrayResized(int oldCapacity, int newCapacity) {
+            if(ArrayResized != null) {
+                ArrayResized(this, new MyListNewSizeEventArgs(oldCapacity, newCapacity));
+            }
+        }
+
+        private void OnArrayCreated() {
+            if(ArrayCreated != null) {
+                ArrayCreated(this, new MyListCreatedEventArgs(this._capacity));
+            }
+        }
+
         public MyList(int capacity = DefaultCapacity)
         {
             if (capacity < 0) {
@@ -25,6 +40,8 @@ namespace Lab1.MyList {
             _capacity = capacity;
             _size = 0;
             _items = capacity is 0 ? Array.Empty<T>() : new T[capacity];
+            ArrayCreated += MyEventHandlers.ListCreatedEventHandler!;
+            OnArrayCreated();
         }
 
         public T this[int index] {
@@ -116,6 +133,8 @@ namespace Lab1.MyList {
             Array.Copy(_items, tempArray, _size);
             _items = tempArray;
             _capacity = NewCapacity;
+
+            OnArrayResized(NewCapacity / 2, _capacity);
         }
     }
 }
