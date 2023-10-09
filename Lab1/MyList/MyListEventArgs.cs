@@ -23,4 +23,23 @@ namespace Lab1.MyList {
             this.Capacity = Capacity;
         }
     }
+
+    public enum ItemChangeType {
+        ItemAdded,
+        ItemRemoved
+    }
+
+    public class MyListItemChangesEventArgs<T> : EventArgs {
+        public ItemChangeType ItemChangeType { get; private set; }
+
+        public T Item { get; private set; }
+        public int Index { get; private set; }
+
+        public MyListItemChangesEventArgs(T item, int index, ItemChangeType itemChangeType)
+        {
+            Item = item;
+            this.Index = index;
+            ItemChangeType = itemChangeType;
+        }
+    }
 }

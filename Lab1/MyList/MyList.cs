@@ -19,18 +19,8 @@ namespace Lab1.MyList {
 
         public EventHandler<MyListNewSizeEventArgs> ArrayResized;
         public EventHandler<MyListCreatedEventArgs> ArrayCreated;
-
-        private void OnArrayResized(int oldCapacity, int newCapacity) {
-            if(ArrayResized != null) {
-                ArrayResized(this, new MyListNewSizeEventArgs(oldCapacity, newCapacity));
-            }
-        }
-
-        private void OnArrayCreated() {
-            if(ArrayCreated != null) {
-                ArrayCreated(this, new MyListCreatedEventArgs(this._capacity));
-            }
-        }
+        public EventHandler<MyListItemChangesEventArgs<T>> ItemAdded;
+        public EventHandler<MyListItemChangesEventArgs<T>> ItemRemoved;
 
         public MyList(int capacity = DefaultCapacity)
         {
@@ -60,6 +50,7 @@ namespace Lab1.MyList {
                 Resize();
             }
             _items[_size] = item;
+            OnItemAdded(item, _size);
             _size++;
         }
 
@@ -92,10 +83,10 @@ namespace Lab1.MyList {
             if(_size < index || index < 0) {
                 throw new ArgumentOutOfRangeException("Inalid index. Index must be in range.");
             }
-            if(_size == index) {
+            if(_capacity == _size) {
                 Resize();
             }
-
+            OnItemAdded(item, index);
             Array.Copy(_items, index, _items, index + 1, _size - index);
             _size++;
             _items[index] = item;
@@ -116,6 +107,7 @@ namespace Lab1.MyList {
                 throw new ArgumentOutOfRangeException("You can't remove item because index is out of range");
             }
             _size--;
+            OnItemRemoved(_items[index], index);
             Array.Copy(_items, index + 1, _items, index, _size - index);
         }
 
@@ -135,6 +127,30 @@ namespace Lab1.MyList {
             _capacity = NewCapacity;
 
             OnArrayResized(NewCapacity / 2, _capacity);
+        }
+
+        private void OnArrayResized(int oldCapacity, int newCapacity) {
+            if (ArrayResized != null) {
+                ArrayResized(this, new MyListNewSizeEventArgs(oldCapacity, newCapacity));
+            }
+        }
+
+        private void OnArrayCreated() {
+            if (ArrayCreated != null) {
+                ArrayCreated(this, new MyListCreatedEventArgs(this._capacity));
+            }
+        }
+
+        private void OnItemAdded(T item, int index) {
+            if (ItemAdded != null) {
+                ItemAdded(this, new MyListItemChangesEventArgs<T>(item, index, ItemChangeType.ItemAdded));
+            }
+        }
+
+        private void OnItemRemoved(T item, int index) {
+            if (ItemRemoved != null) {
+                ItemRemoved(this, new MyListItemChangesEventArgs<T>(item, index, ItemChangeType.ItemRemoved));
+            }
         }
     }
 }
