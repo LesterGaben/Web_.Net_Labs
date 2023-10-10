@@ -1,4 +1,5 @@
-﻿using Lab1.MyList;
+﻿//using Lab1.MyList;
+using MyListLibrary;
 namespace Lab1 {
     internal class Program {
         static void Main(string[] args) {
