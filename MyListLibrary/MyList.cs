@@ -22,6 +22,8 @@ namespace MyListLibrary {
         public EventHandler<MyListItemChangesEventArgs<T>> ItemAdded;
         public EventHandler<MyListItemChangesEventArgs<T>> ItemRemoved;
 
+        public int GetCapacity () { return _capacity; }
+
         public MyList(int capacity = DefaultCapacity)
         {
             if (capacity < 0) {
@@ -38,7 +40,7 @@ namespace MyListLibrary {
             get => _items[index];
             set {
                 if (index < 0 || index >= _items.Length - 1) {
-                    throw new ArgumentOutOfRangeException(nameof(index), "Index is out of range");
+                    throw new IndexOutOfRangeException(nameof(index));
                 }
 
                 _items[index] = value;
@@ -68,11 +70,16 @@ namespace MyListLibrary {
         }
 
         public void CopyTo(T[] array, int arrayIndex) {
-            if(array == null) throw new ArgumentNullException(nameof(array));
-            if (array.Length - arrayIndex < _items.Length) {
+            if (array == null) {
+                throw new ArgumentNullException(nameof(array));
+            }
+            if(arrayIndex >= array.Length || arrayIndex < 0) {
+                throw new ArgumentException("Index is invalid");
+            }
+            if (array.Length - arrayIndex < _size) {
                 throw new ArgumentException("Dest array is too small");
             }
-            Array.Copy(_items, 0, array, arrayIndex,_items.Length);
+            Array.ConstrainedCopy(_items, 0, array, arrayIndex, _size);
         }
 
         public int IndexOf(T item) {

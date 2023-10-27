@@ -44,6 +44,15 @@ namespace Lab1 {
             Console.Write("List after removing index 3: ");
             OutputMyIntArray(list);
 
+            int[] testArrayToCopy = new int[list.Count];
+            list.CopyTo(testArrayToCopy, 0);
+            Console.WriteLine("\ntestArray after copy: ");
+            foreach (var item in testArrayToCopy) {
+                Console.Write(item + " ");
+            }
+            Console.WriteLine("\n");
+
+            
             
 
         }

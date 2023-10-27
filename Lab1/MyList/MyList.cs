@@ -68,11 +68,16 @@ namespace Lab1.MyList {
         }
 
         public void CopyTo(T[] array, int arrayIndex) {
-            if(array == null) throw new ArgumentNullException(nameof(array));
-            if (array.Length - arrayIndex < _items.Length) {
+            if (array == null) {
+                throw new ArgumentNullException(nameof(array));
+            }
+            if (arrayIndex >= array.Length || arrayIndex < 0) {
+                throw new ArgumentException("Index is invalid");
+            }
+            if (array.Length - arrayIndex < _size) {
                 throw new ArgumentException("Dest array is too small");
             }
-            Array.Copy(_items, 0, array, arrayIndex,_items.Length);
+            Array.ConstrainedCopy(_items, 0, array, arrayIndex, _size);
         }
 
         public int IndexOf(T item) {
