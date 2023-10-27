@@ -99,5 +99,59 @@ namespace Lab2 {
             Assert.Throws<IndexOutOfRangeException>(() => myList[-1]);
             Assert.Throws<IndexOutOfRangeException>(() => myList[200]);
         }
+
+        [Fact]
+        public void Add_NewItem_ToFullList_RisezesAndContainsItem() {
+
+            //Arange
+            MyList<int> newList = new MyList<int> { 1 };
+
+            //Act
+            newList.Add(2);
+
+            //Assert
+            Assert.Equal(2, newList.Count);
+            Assert.Contains(2, newList);
+        }
+
+        [Fact]
+        public void Add_NewItem_ToEmptyList_RisezesAndContainsItem() {
+
+            //Arange
+            MyList<int> newList = new MyList<int>();
+
+            //Act
+            newList.Add(5);
+
+            //Assert
+            Assert.Equal(1, newList.Count);
+            Assert.Contains(5, newList);
+        }
+
+        [Fact]
+        public void Clear_EmptyList_ClearsList() {
+            
+            //Arange
+            MyList<int> myList = new MyList<int>();
+
+            //Act
+            myList.Clear();
+
+            //Assert
+            Assert.Empty(myList);
+        }
+
+        [Fact]
+        public void Clear_NonEmptyList_ClearsList() {
+
+            //Arange
+            MyList<int> myList = new MyList<int> { 1, 2, 3};
+
+            //Act
+            myList.Clear();
+
+            //Assert
+            Assert.Empty(myList);
+        }
     }
 }
