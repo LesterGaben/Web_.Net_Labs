@@ -221,5 +221,119 @@ namespace Lab2 {
             int[] expectedList = new int[] {1, 2, 3};
             Assert.Equal(expectedList, list2);
         }
+
+        [Fact]
+        public void IndexOf_InvalidItem_ReturnsMinusOne() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> { 1, 2, 3 };
+
+            //Act & Assert
+            Assert.Equal(-1, list1.IndexOf(500));
+        }
+
+        [Fact]
+        public void IndexOf_ValidItem_ReturnsTrueIndex() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> { 1, 2, 3 };
+
+            //Act & Assert
+            Assert.Equal(1, list1.IndexOf(2));
+        }
+
+        [Fact]
+        public void Insert_InvalidIndex_ThrowsArgumentOutOfRangeException() {
+
+            //Arange
+            MyList<int> list = new MyList<int> { 1, 2, 3 };
+
+            //Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(-5, 5));
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.Insert(5, 5));
+        }
+
+        [Fact]
+        public void Insert_ValidParameters_WithResize_ResizesAndInsertItem() {
+
+            //Arange
+            MyList<int> list = new MyList<int>(3) { 1, 2, 3 };
+
+            //Act
+            list.Insert(3, 4);
+
+            //Assert
+            Assert.Equal(6, list.GetCapacity());
+            Assert.Equal(4, list[3]);
+        }
+
+        [Fact]
+        public void Insert_ValidParameters_WithoutResize() {
+
+            //Arange
+            MyList<int> list = new MyList<int>(2) { 10 };
+
+            //Act
+            list.Insert(1, 2);
+
+            //Assert
+            Assert.Equal(2, list.Count);
+            Assert.Equal(2, list[1]);
+        }
+
+        [Fact]
+        public void Remove_FromEmptyList_ThrowsInvalidOperationException() {
+
+            //Arange
+            MyList<int> list = new MyList<int>(0);
+
+            //Act & Assert
+            Assert.Throws<InvalidOperationException>(() => list.Remove(5));
+        }
+
+        [Fact]
+        public void Remove_From_NormalList_RemovesItem() {
+
+            // Arange
+            MyList<int> list = new MyList<int>();
+            list.Add(1);
+            list.Add(2);
+
+            // Act
+            bool removed = list.Remove(1);
+
+            // Assert
+            Assert.True(removed);
+            Assert.False(list.Contains(1));
+            Assert.Equal(1, list.Count);
+        }
+
+        [Fact]
+        public void RemoveAt_InvalidIndex_ThrowsArgumentOutOfRangeException() {
+
+            //Arange
+            MyList<int> list = new MyList<int>(1) { 1 };
+
+            //Act & Assert
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(-1));
+            Assert.Throws<ArgumentOutOfRangeException>(() => list.RemoveAt(2));
+
+        }
+
+        [Fact]
+        public void RemoveAt_ValidIndex_RemovesItem() {
+
+            MyList<int> list = new MyList<int>();
+            list.Add(1);
+            list.Add(2);
+            list.Add(3);
+
+            // Act
+            list.RemoveAt(1);
+
+            // Assert
+            Assert.Equal(2, list.Count);
+            Assert.False(list.Contains(2));
+        }
     }
 }
