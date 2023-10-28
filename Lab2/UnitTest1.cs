@@ -90,14 +90,13 @@ namespace Lab2 {
         }
 
         [Fact]
-        public void Indexer_ThrowsException_IfSetIndexInvalid() {
+        public void Indexer_Sets_InvalidIndex_ThrowsArgumentOutOfRangeException() {
+            // Arrange
+            MyList<int> customList = new MyList<int> { 1 };
 
-            //Arange
-            MyList<int> myList = new MyList<int>(0);
-
-            //Act & Assert
-            Assert.Throws<IndexOutOfRangeException>(() => myList[-1]);
-            Assert.Throws<IndexOutOfRangeException>(() => myList[200]);
+            // Act & Assert
+            Assert.Throws<IndexOutOfRangeException>(() => customList[-10] = 2);
+            Assert.Throws<IndexOutOfRangeException>(() => customList[10] = 2);
         }
 
         [Fact]
@@ -152,6 +151,75 @@ namespace Lab2 {
 
             //Assert
             Assert.Empty(myList);
+        }
+
+        [Fact]
+        public void Contains_EmptyList_ReturnsFalse() {
+
+            //Arange
+            MyList<int> myList = new MyList<int>();
+
+            //Act & Assert
+            Assert.False(myList.Contains(1));
+
+        }
+
+        [Fact]
+        public void Contains_NonEmptyList_ReturnsTrue() {
+
+            //Arange
+            MyList<int> myList = new MyList<int> { 1, 3, 4 };
+
+            //Act & Assert
+            Assert.True(myList.Contains(1));
+        }
+
+        [Fact]
+        public void CopyTo_NullList_ThrowsArgumentNullException() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> {1, 2, 3};
+            int[]? list2 = null;
+
+            //Act & Assert
+            Assert.Throws<ArgumentNullException>(() => list1.CopyTo(list2!, 0));
+        }
+
+        [Fact]
+        public void CopyTo_InvalidIndex_ThrowsArgumentException() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> { 1, 2, 3 };
+            int[] list2 = new int[list1.Count];
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() =>  list1.CopyTo(list2, 5));
+        }
+
+        [Fact]
+        public void CopyTo_SmallDestArray_ThrowsArgumentException() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> { 1, 2, 3 };
+            int[] list2 = new int[1];
+
+            //Act & Assert
+            Assert.Throws<ArgumentException>(() => list1.CopyTo(list2, 0));
+        }
+
+        [Fact]
+        public void CopyTo_ValidArraysAndParameters_CopiesItemsToDestArray() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int> { 1, 2, 3 };
+            int[] list2 = new int[list1.Count];
+
+            //Act
+            list1.CopyTo(list2, 0);
+
+            //Assert
+            int[] expectedList = new int[] {1, 2, 3};
+            Assert.Equal(expectedList, list2);
         }
     }
 }
