@@ -53,15 +53,6 @@ namespace Lab1 {
             }
             Console.WriteLine("\n");
 
-            MyList<int> list55 = new MyList<int> { 1, 2, 3, 4, 5 };
-
-            //Act
-            list55.Remove(5);
-            Console.Write("List after removing 5: ");
-            OutputMyIntArray(list55);
-            Console.WriteLine(list55.Contains(5));
-
-
         }
 
         public static void OutputMyIntArray(MyList<int> list) {

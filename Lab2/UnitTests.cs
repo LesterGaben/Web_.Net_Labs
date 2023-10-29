@@ -2,7 +2,7 @@ using MyListLibrary;
 using System.Collections.Generic;
 
 namespace Lab2 {
-    public class Tests {
+    public class UnitTests {
 
         [Fact]
         public void Property_IsReadOnly_False() {

@@ -32,7 +32,7 @@ namespace MyListLibrary {
             _capacity = capacity;
             _size = 0;
             _items = capacity is 0 ? Array.Empty<T>() : new T[capacity];
-            
+            ArrayCreated += MyEventHandlers.ListCreatedEventHandler!;
             OnArrayCreated();
         }
 
