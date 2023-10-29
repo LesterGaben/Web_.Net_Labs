@@ -5,6 +5,7 @@ namespace Lab1 {
             MyList<int> list;
 
             list = new MyList<int>(5) { 1, 2, 3, 4, 5 };
+            list.ArrayCreated += MyEventHandlers.ListCreatedEventHandler!;
             list.ArrayResized += MyEventHandlers.ListResizedEventHandler!;
             list.ItemAdded += MyEventHandlers.ListItemChangesEventHandler!;
             list.ItemRemoved += MyEventHandlers.ListItemChangesEventHandler!;

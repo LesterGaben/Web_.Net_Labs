@@ -1,4 +1,5 @@
 using MyListLibrary;
+using System.Collections.Generic;
 
 namespace Lab2 {
     public class Tests {
@@ -323,6 +324,7 @@ namespace Lab2 {
         [Fact]
         public void RemoveAt_ValidIndex_RemovesItem() {
 
+            //Arange
             MyList<int> list = new MyList<int>();
             list.Add(1);
             list.Add(2);
@@ -334,6 +336,115 @@ namespace Lab2 {
             // Assert
             Assert.Equal(2, list.Count);
             Assert.False(list.Contains(2));
+        }
+
+        [Fact]
+        public void GetEnumerator_EmpltyList_ReturnsEmptyEnumerator() {
+
+            //Arange
+            MyList<int> list = new MyList<int>() ;
+
+            //Act
+            var enumerator = list.GetEnumerator();
+
+            //Assert
+            Assert.False(enumerator.MoveNext());
+        }
+
+        [Fact]
+        public void GetEnumerator_NonEmptyList_ReturnsCorrectEnumerator() {
+
+            // Arange
+            MyList<int> list1 = new MyList<int>();
+            list1.Add(1);
+            list1.Add(2);
+            list1.Add(3);
+
+            // Act
+            var enumerator = list1.GetEnumerator();
+
+            // Assert
+            List<int> list2 = new List<int>();
+            int i = 0;
+            while (i < list1.Count) {
+                list2.Add(enumerator.Current);
+                enumerator.MoveNext();
+                i++;
+            }
+
+            Assert.Equal(new[] { 1, 2, 3 }, list2);
+        }
+
+        [Fact]
+        public void ArrayResizedEvent_HandlerLogsCorrectly() {
+
+            // Arange
+            MyList<int> list = new MyList<int>(1) { 1 };
+            list.ArrayResized += MyEventHandlers.ListResizedEventHandler!;
+
+            var consoleOutput = new System.IO.StringWriter();
+            Console.SetOut(consoleOutput);
+
+            //Act
+            list.Insert(0, 1);
+
+            //Assert
+            var expectedOutput = "\nEvent: change size; OldCapacity: 1, NewCapacity: 2\n";
+            Assert.Contains(expectedOutput, consoleOutput.ToString());
+        }
+
+        [Fact]
+        public void ItemAddedEvent_HandlerLogsCorrectly() {
+
+            // Arange
+            MyList<int> list = new MyList<int>();
+            list.ItemAdded += MyEventHandlers.ListItemChangesEventHandler!;
+
+            var consoleOutput = new System.IO.StringWriter();
+            Console.SetOut(consoleOutput);
+
+            // Act
+            list.Add(1);
+
+            // Assert
+            var expectedOutput = "\nEvent: ItemAdded; Item: 1; Index: 0\n";
+            Assert.Contains(expectedOutput, consoleOutput.ToString());
+        }
+
+        [Fact]
+        public void ItemRemovedEvent_HandlerLogsCorrectly() {
+
+            // Arange
+            MyList<int> list = new MyList<int>() { 1 };
+            list.ItemRemoved += MyEventHandlers.ListItemChangesEventHandler!;
+
+            var consoleOutput = new System.IO.StringWriter();
+            Console.SetOut(consoleOutput);
+
+            // Act
+            list.Remove(1);
+
+            // Assert
+            var expectedOutput = "\nEvent: ItemRemoved; Item: 1; Index: 0\n";
+            Assert.Contains(expectedOutput, consoleOutput.ToString());
+        }
+
+        [Fact]
+        public void MyListEnumerator_ResetTest_WorksNormal() {
+
+            //Arange
+            MyList<int> list1 = new MyList<int>();
+            list1.Add(1);
+            list1.Add(2);
+            list1.Add(3);
+
+            // Act
+            var enumerator = list1.GetEnumerator();
+            enumerator.MoveNext();
+            enumerator.Reset();
+
+            //Assert
+            Assert.Equal(list1[0], enumerator.Current);
         }
     }
 }
